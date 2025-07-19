@@ -1,0 +1,5 @@
+pipeline:
+  - standardize_columns
+  - convert_data_types
+  - vendor_alias_rule
+  - remove_duplicates 

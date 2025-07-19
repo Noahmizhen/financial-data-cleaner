@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickBooks Data Cleaner - Professional Financial Data Processing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .hero-section {
+            text-align: center;
+            padding: 80px 20px 60px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+        
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        }
+        
+        .pricing-card.featured {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+        
+        .card-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .card-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: inherit;
+        }
+        
+        .card-subtitle {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 400;
+        }
+        
+        .pricing-card:not(.featured) .card-subtitle {
+            color: #666;
+        }
+        
+        .features-list {
+            list-style: none;
+            margin: 30px 0;
+        }
+        
+        .features-list li {
+            padding: 12px 0;
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+        
+        .features-list li::before {
+            content: "✓";
+            margin-right: 12px;
+            font-weight: bold;
+            color: #28a745;
+            font-size: 1.1rem;
+        }
+        
+        .pricing-card.featured .features-list li::before {
+            color: #ffd700;
+        }
+        
+        .upload-area {
+            margin: 25px 0;
+            padding: 30px;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .pricing-card:not(.featured) .upload-area {
+            border-color: rgba(102, 126, 234, 0.3);
+            background: rgba(102, 126, 234, 0.05);
+        }
+        
+        .upload-area:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .pricing-card:not(.featured) .upload-area:hover {
+            border-color: rgba(102, 126, 234, 0.5);
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .file-input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        .pricing-card.featured .file-input {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        .pricing-card.featured .file-input::file-selector-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .alert {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        
+        .alert-error {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.2);
+        }
+        
+        .alert-info {
+            background: rgba(13, 202, 240, 0.1);
+            color: #0dcaf0;
+            border: 1px solid rgba(13, 202, 240, 0.2);
+        }
+        
+        .info-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            margin: 40px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .info-section h3 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .info-section p, .info-section li {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 10px;
+        }
+        
+        .info-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .info-section li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-section li::before {
+            content: "→";
+            margin-right: 12px;
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
+        .badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pricing-card.featured {
+                transform: none;
+            }
+            
+            .pricing-card.featured:hover {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-section">
+        <h1 class="hero-title">QuickBooks Data Cleaner</h1>
+        <p class="hero-subtitle">Transform messy financial data into clean, categorized transactions with AI-powered insights</p>
+    </div>
+    
+    <div class="main-container">
+        {% if error %}
+        <div class="alert alert-error">
+            <strong>Error:</strong> {{ error }}
+        </div>
+        {% endif %}
+        
+        {% if msg %}
+        <div class="alert alert-info">
+            {{ msg }}
+        </div>
+        {% endif %}
+        
+        <div class="pricing-grid">
+            <!-- Standard Cleaning Card -->
+            <div class="pricing-card">
+                <div class="card-header">
+                    <h3 class="card-title">🔧 Standard Cleaning</h3>
+                    <p class="card-subtitle">Smart data cleaning with column mapping and categorization</p>
+                </div>
+                
+                <ul class="features-list">
+                    <li>Intelligent column mapping</li>
+                    <li>Date standardization</li>
+                    <li>Duplicate removal</li>
+                    <li>Basic categorization</li>
+                    <li>Quality reporting</li>
+                    <li>Export to CSV/Excel</li>
+                </ul>
+                
+                <form action="/upload" method="post" enctype="multipart/form-data">
+                    <div class="upload-area">
+                        <input type="file" name="file" accept=".csv,.xlsx" required class="file-input">
+                        <p style="margin-top: 10px; font-size: 0.9rem; color: #666;">Supports CSV and Excel files</p>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Clean Data</button>
+                </form>
+            </div>
+            
+            <!-- Financial Services Card -->
+            <div class="pricing-card featured">
+                <div class="badge">Premium</div>
+                <div class="card-header">
+                    <h3 class="card-title">💎 Financial Services</h3>
+                    <p class="card-subtitle">Advanced financial analysis powered by Claude's Financial Services</p>
+                </div>
+                
+                <ul class="features-list">
+                    <li>Industry-specific categorization</li>
+                    <li>Risk assessment & compliance</li>
+                    <li>Business insights & recommendations</li>
+                    <li>Financial trend analysis</li>
+                    <li>Professional reporting</li>
+                    <li><strong>Multi-file analysis</strong></li>
+                </ul>
+                
+                <form action="/upload_financial" method="post" enctype="multipart/form-data">
+                    <div class="upload-area">
+                        <input type="file" name="file" accept=".csv,.xlsx" required class="file-input">
+                        <p style="margin-top: 10px; font-size: 0.9rem; color: rgba(255,255,255,0.8);">Enhanced analysis for financial data</p>
+                    </div>
+                    <button type="submit" class="btn btn-secondary">Analyze with AI</button>
+                </form>
+                
+                <hr style="margin: 30px 0; border: 1px solid rgba(255,255,255,0.3);">
+                
+                <div style="text-align: center;">
+                    <h4 style="margin: 15px 0; color: #ffd700; font-size: 1.1rem;">🔄 Multi-File Analysis</h4>
+                    <p style="font-size: 0.9rem; margin-bottom: 20px; color: rgba(255,255,255,0.8);">Upload multiple files for comprehensive financial insights</p>
+                    
+                    <form action="/upload_financial_multi" method="post" enctype="multipart/form-data">
+                        <div class="upload-area">
+                            <input type="file" name="files" accept=".csv,.xlsx" multiple required class="file-input">
+                            <p style="margin-top: 10px; font-size: 0.9rem; color: rgba(255,255,255,0.8);">Select multiple CSV/Excel files for combined analysis</p>
+                        </div>
+                        <button type="submit" class="btn btn-secondary" style="background: rgba(40, 167, 69, 0.8);">Analyze Multiple Files</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <h3>📊 What We Clean</h3>
+            <p>Our system automatically handles:</p>
+            <ul>
+                <li><strong>Transactions:</strong> Expenses, income, payments</li>
+                <li><strong>Accounts:</strong> Chart of accounts, balances</li>
+                <li><strong>Customer Data:</strong> Contact information, purchase history</li>
+                <li><strong>Financial Reports:</strong> P&L, balance sheets, budgets</li>
+            </ul>
+        </div>
+        
+        <div class="info-section">
+            <h3>🚀 Powered by Claude Financial Services</h3>
+            <p>Our enhanced Financial Services option leverages Anthropic's new Claude Financial Analysis Solution, providing:</p>
+            <ul>
+                <li>Real-time access to financial data standards</li>
+                <li>Industry-leading categorization accuracy</li>
+                <li>Compliance and risk assessment</li>
+                <li>Professional-grade business insights</li>
+                <li>Cross-dataset pattern recognition</li>
+                <li>Strategic recommendations</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

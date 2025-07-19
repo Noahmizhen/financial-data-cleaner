@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickBooks Data Cleaner - Enterprise Financial Intelligence Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .hero-section {
+            text-align: center;
+            padding: 100px 20px 80px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.8) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 25px;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
+            max-width: 700px;
+            margin: 0 auto 50px;
+            line-height: 1.5;
+        }
+        
+        .features-highlight {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .feature-item {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+        
+        .feature-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 8px;
+        }
+        
+        .feature-desc {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+        
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 40px;
+            margin: 60px 0;
+        }
+        
+        .service-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.2);
+        }
+        
+        .service-card.featured {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: scale(1.02);
+        }
+        
+        .service-card.featured::before {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+        }
+        
+        .service-card.featured:hover {
+            transform: scale(1.02) translateY(-10px);
+        }
+        
+        .service-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .service-badge {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+        
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+        
+        .service-card.featured .service-icon {
+            color: #ffd700;
+        }
+        
+        .service-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: inherit;
+        }
+        
+        .service-subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            font-weight: 400;
+            margin-bottom: 30px;
+        }
+        
+        .service-card.featured .service-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .features-list {
+            list-style: none;
+            margin: 40px 0;
+        }
+        
+        .features-list li {
+            padding: 15px 0;
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .service-card.featured .features-list li {
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .features-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .features-list li::before {
+            content: "";
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border-radius: 50%;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: white;
+            font-size: 0.7rem;
+        }
+        
+        .service-card.featured .features-list li::before {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #333;
+        }
+        
+        .upload-section {
+            margin: 40px 0;
+            padding: 40px;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .service-card:not(.featured) .upload-section {
+            border-color: rgba(102, 126, 234, 0.3);
+            background: rgba(102, 126, 234, 0.05);
+        }
+        
+        .upload-section:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .service-card:not(.featured) .upload-section:hover {
+            border-color: rgba(102, 126, 234, 0.5);
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .upload-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .service-card:not(.featured) .upload-icon {
+            color: #667eea;
+        }
+        
+        .file-input {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .file-input:hover {
+            background: white;
+            transform: translateY(-1px);
+        }
+        
+        .service-card.featured .file-input {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .service-card.featured .file-input:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .file-input::file-selector-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-right: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .file-input::file-selector-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .service-card.featured .file-input::file-selector-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .upload-text {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .service-card:not(.featured) .upload-text {
+            color: #666;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(40, 167, 69, 0.4);
+        }
+        
+        .divider {
+            margin: 40px 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        }
+        
+        .service-card:not(.featured) .divider {
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.3), transparent);
+        }
+        
+        .multi-file-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .multi-file-title {
+            margin: 20px 0;
+            color: #ffd700;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .multi-file-title i {
+            margin-right: 10px;
+        }
+        
+        .multi-file-desc {
+            font-size: 1rem;
+            margin-bottom: 25px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .info-sections {
+            margin-top: 80px;
+        }
+        
+        .info-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            padding: 50px;
+            border-radius: 25px;
+            margin: 40px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-section h3 {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-section h3 i {
+            margin-right: 15px;
+            color: #ffd700;
+        }
+        
+        .info-section p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .info-list {
+            list-style: none;
+            padding-left: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .info-list li {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .info-list li:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .info-list li::before {
+            content: "";
+            width: 12px;
+            height: 12px;
+            background: #ffd700;
+            border-radius: 50%;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .info-list li strong {
+            color: #ffd700;
+            margin-right: 8px;
+        }
+        
+        .alert {
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 15px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .alert-error {
+            background: rgba(220, 53, 69, 0.15);
+            color: #dc3545;
+            border-color: rgba(220, 53, 69, 0.3);
+        }
+        
+        .alert-info {
+            background: rgba(13, 202, 240, 0.15);
+            color: #0dcaf0;
+            border-color: rgba(13, 202, 240, 0.3);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 1200px) {
+            .service-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .features-highlight {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .service-card {
+                padding: 30px;
+            }
+            
+            .info-list {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .features-highlight {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-container {
+                padding: 40px 15px;
+            }
+            
+            .hero-section {
+                padding: 60px 15px 40px;
+            }
+            
+            .service-card {
+                padding: 25px;
+            }
+            
+            .info-section {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-section">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-rocket"></i> Enterprise Financial Intelligence Platform
+            </div>
+            <h1 class="hero-title">QuickBooks Data Cleaner</h1>
+            <p class="hero-subtitle">Transform messy financial data into actionable business intelligence with AI-powered analysis and enterprise-grade insights</p>
+            
+            <div class="features-highlight">
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-brain"></i></div>
+                    <div class="feature-title">AI-Powered Analysis</div>
+                    <div class="feature-desc">Advanced pattern recognition</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                    <div class="feature-title">Business Intelligence</div>
+                    <div class="feature-desc">Comprehensive insights & trends</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="feature-title">Risk Assessment</div>
+                    <div class="feature-desc">Automated compliance checking</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    <div class="feature-title">Enterprise Scale</div>
+                    <div class="feature-desc">Handle 100,000+ transactions</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="main-container">
+        {% if error %}
+        <div class="alert alert-error">
+            <strong><i class="fas fa-exclamation-triangle"></i> Error:</strong> {{ error }}
+        </div>
+        {% endif %}
+        
+        {% if msg %}
+        <div class="alert alert-info">
+            <strong><i class="fas fa-info-circle"></i> Info:</strong> {{ msg }}
+        </div>
+        {% endif %}
+        
+        <!-- Performance Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">6</div>
+                <div class="stat-label">Analysis Modules</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">100K+</div>
+                <div class="stat-label">Transactions Supported</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">40%</div>
+                <div class="stat-label">Accuracy Improvement</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">&lt;5s</div>
+                <div class="stat-label">Analysis Time</div>
+            </div>
+        </div>
+        
+        <div class="service-grid">
+            <!-- Standard Cleaning Card -->
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon"><i class="fas fa-tools"></i></div>
+                    <h3 class="service-title">Standard Cleaning</h3>
+                    <p class="service-subtitle">Professional data cleaning with intelligent automation</p>
+                </div>
+                
+                <ul class="features-list">
+                    <li>Intelligent column mapping</li>
+                    <li>Date standardization</li>
+                    <li>Advanced duplicate removal</li>
+                    <li>Smart categorization</li>
+                    <li>Quality reporting</li>
+                    <li>Export to CSV/Excel</li>
+                </ul>
+                
+                <form action="/upload" method="post" enctype="multipart/form-data">
+                    <div class="upload-section">
+                        <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <input type="file" name="file" accept=".csv,.xlsx" required class="file-input">
+                        <p class="upload-text">Supports CSV and Excel files up to 100MB</p>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-magic"></i> Clean Data
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Financial Services Card -->
+            <div class="service-card featured">
+                <div class="service-badge">Enterprise</div>
+                <div class="service-header">
+                    <div class="service-icon"><i class="fas fa-gem"></i></div>
+                    <h3 class="service-title">Financial Intelligence</h3>
+                    <p class="service-subtitle">Advanced business intelligence with enterprise-grade analytics</p>
+                </div>
+                
+                <ul class="features-list">
+                    <li>6 Advanced Analysis Modules</li>
+                    <li>Vendor Relationship Analysis</li>
+                    <li>Cash Flow Intelligence</li>
+                    <li>Risk Assessment & Compliance</li>
+                    <li>Spending Pattern Recognition</li>
+                    <li>Strategic Recommendations</li>
+                    <li>Enterprise Reporting</li>
+                    <li>Multi-file Consolidation</li>
+                </ul>
+                
+                <form action="/upload_financial" method="post" enctype="multipart/form-data">
+                    <div class="upload-section">
+                        <div class="upload-icon"><i class="fas fa-brain"></i></div>
+                        <input type="file" name="file" accept=".csv,.xlsx" required class="file-input">
+                        <p class="upload-text">AI-powered analysis for comprehensive financial intelligence</p>
+                    </div>
+                    <button type="submit" class="btn btn-secondary">
+                        <i class="fas fa-rocket"></i> Analyze with AI
+                    </button>
+                </form>
+                
+                <div class="divider"></div>
+                
+                <div class="multi-file-section">
+                    <div class="multi-file-title">
+                        <i class="fas fa-layer-group"></i> Multi-File Intelligence
+                    </div>
+                    <p class="multi-file-desc">Upload multiple files for comprehensive cross-dataset analysis and consolidated insights</p>
+                    
+                    <form action="/upload_financial_multi" method="post" enctype="multipart/form-data">
+                        <div class="upload-section">
+                            <div class="upload-icon"><i class="fas fa-files"></i></div>
+                            <input type="file" name="files" accept=".csv,.xlsx" multiple required class="file-input">
+                            <p class="upload-text">Select multiple files for consolidated business intelligence</p>
+                        </div>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-analytics"></i> Analyze Multiple Files
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-sections">
+            <div class="info-section">
+                <h3><i class="fas fa-database"></i> Advanced Data Processing</h3>
+                <p>Our enterprise-grade system handles complex financial data with unprecedented accuracy and intelligence:</p>
+                <ul class="info-list">
+                    <li><strong>Smart Transactions:</strong> Automated expense, income, and payment categorization</li>
+                    <li><strong>Account Intelligence:</strong> Chart of accounts optimization and balance analysis</li>
+                    <li><strong>Customer Insights:</strong> Contact data enrichment and purchase pattern analysis</li>
+                    <li><strong>Financial Reports:</strong> P&L optimization, balance sheet analysis, and budget intelligence</li>
+                    <li><strong>Risk Detection:</strong> Fraud pattern recognition and compliance monitoring</li>
+                    <li><strong>Cash Flow Analysis:</strong> Burn rate calculation and runway forecasting</li>
+                </ul>
+            </div>
+            
+            <div class="info-section">
+                <h3><i class="fas fa-rocket"></i> Enterprise Financial Intelligence</h3>
+                <p>Powered by our Advanced Business Insights Engine with enterprise-grade analytics capabilities:</p>
+                <ul class="info-list">
+                    <li><strong>Spending Pattern Recognition:</strong> Seasonal analysis, anomaly detection, and trend forecasting</li>
+                    <li><strong>Vendor Relationship Intelligence:</strong> Risk scoring, payment pattern analysis, and concentration monitoring</li>
+                    <li><strong>Cash Flow Intelligence:</strong> Liquidity analysis, burn rate tracking, and runway calculations</li>
+                    <li><strong>Strategic Recommendations:</strong> AI-powered actionable insights for business optimization</li>
+                    <li><strong>Risk Assessment:</strong> Comprehensive fraud detection and compliance monitoring</li>
+                    <li><strong>Business Opportunities:</strong> Cost optimization and revenue enhancement suggestions</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

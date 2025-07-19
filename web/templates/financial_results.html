@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Financial Analysis Results - QuickBooks Data Cleaner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .content {
+            padding: 30px;
+        }
+        .financial-insights { margin: 20px 0; }
+        .insight-card { 
+            background: #f8f9fa; 
+            border-left: 4px solid #007bff; 
+            padding: 20px; 
+            margin: 15px 0; 
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .insight-card h4 {
+            margin-top: 0;
+            color: #495057;
+        }
+        .risk-high { border-left-color: #dc3545; }
+        .risk-medium { border-left-color: #ffc107; }
+        .risk-low { border-left-color: #28a745; }
+        .metric { 
+            display: inline-block; 
+            margin: 10px 15px 10px 0;
+            padding: 10px 15px;
+            background: #e9ecef;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .tabs { 
+            margin: 30px 0;
+            border-bottom: 2px solid #e9ecef;
+        }
+        .tab-button { 
+            background: #e9ecef; 
+            border: none; 
+            padding: 15px 25px; 
+            cursor: pointer;
+            margin-right: 5px;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .tab-button:hover {
+            background: #dee2e6;
+        }
+        .tab-button.active { 
+            background: #007bff; 
+            color: white; 
+        }
+        .tab-content { 
+            display: none; 
+            padding: 30px 0; 
+            animation: fadeIn 0.3s ease;
+        }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .data-table th {
+            background: #495057;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+        .data-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+        .download-section {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 0 10px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .btn-success {
+            background: #28a745;
+        }
+        .btn-success:hover {
+            background: #218838;
+        }
+        .processing-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        .risk-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .back-section {
+            text-align: center;
+            margin: 40px 0;
+            padding: 20px;
+        }
+        .json-content {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Financial Analysis Results</h1>
+            <p>Powered by Claude Financial Services</p>
+        </div>
+        
+        <div class="content">
+            <!-- Processing Summary -->
+            <div class="processing-stats">
+                <div class="stat-card">
+                    <div class="stat-number">{{ processing_stats.original_rows or 0 }}</div>
+                    <div class="stat-label">Original Rows</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ processing_stats.final_rows or 0 }}</div>
+                    <div class="stat-label">Final Rows</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ processing_stats.duplicates_removed or 0 }}</div>
+                    <div class="stat-label">Duplicates Removed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ processing_stats.categorized_transactions or 0 }}</div>
+                    <div class="stat-label">Categorized</div>
+                </div>
+            </div>
+            
+            <!-- Tabs for different analysis sections -->
+            <div class="tabs">
+                <button class="tab-button active" onclick="showTab('data')">Cleaned Data</button>
+                <button class="tab-button" onclick="showTab('analysis')">Financial Analysis</button>
+                <button class="tab-button" onclick="showTab('risks')">Risk Assessment</button>
+                <button class="tab-button" onclick="showTab('insights')">Business Insights</button>
+            </div>
+            
+            <!-- Data Tab -->
+            <div id="data-tab" class="tab-content active">
+                <h3>Cleaned Data (First 20 rows)</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            {% for col in columns %}
+                            <th>{{ col }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in data %}
+                        <tr>
+                            {% for col in columns %}
+                            <td>{{ row.get(col, '') }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                <div class="download-section">
+                    <h4>Download Your Results</h4>
+                    <a href="/download/excel" class="btn btn-success">📊 Download Excel</a>
+                    <a href="/download/csv" class="btn">📄 Download CSV</a>
+                </div>
+            </div>
+            
+            <!-- Financial Analysis Tab -->
+            <div id="analysis-tab" class="tab-content">
+                <h3>Financial Analysis</h3>
+                {% if financial_analysis and not financial_analysis.error %}
+                    <div class="insight-card">
+                        <h4>📋 Data Classification</h4>
+                        <p>{{ financial_analysis.get('data_type', 'Not available') }}</p>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <h4>🏢 Industry Context</h4>
+                        <p>{{ financial_analysis.get('industry_context', 'Not available') }}</p>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <h4>💡 Key Insights</h4>
+                        <p>{{ financial_analysis.get('key_insights', 'Not available') }}</p>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <h4>🎯 Categorization Strategy</h4>
+                        <p>{{ financial_analysis.get('categorization_strategy', 'Not available') }}</p>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <h4>📋 Recommendations</h4>
+                        <p>{{ financial_analysis.get('recommendations', 'Not available') }}</p>
+                    </div>
+                {% else %}
+                    <div class="insight-card">
+                        <h4>❗ Analysis Status</h4>
+                        <p>Financial analysis not available or failed to generate. {{ financial_analysis.get('error', '') }}</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Risk Assessment Tab -->
+            <div id="risks-tab" class="tab-content">
+                <h3>Risk Assessment</h3>
+                {% if risk_assessment and not risk_assessment.error %}
+                    <div class="risk-grid">
+                        <div class="insight-card risk-{{ risk_assessment.get('fraud_risk', 'low').lower() }}">
+                            <h4>🚨 Fraud Risk: {{ risk_assessment.get('fraud_risk', 'Unknown') }}</h4>
+                        </div>
+                        
+                        <div class="insight-card risk-{{ risk_assessment.get('compliance_risk', 'low').lower() }}">
+                            <h4>📋 Compliance Risk: {{ risk_assessment.get('compliance_risk', 'Unknown') }}</h4>
+                        </div>
+                        
+                        <div class="insight-card risk-{{ risk_assessment.get('data_quality_risk', 'low').lower() }}">
+                            <h4>📊 Data Quality Risk: {{ risk_assessment.get('data_quality_risk', 'Unknown') }}</h4>
+                        </div>
+                        
+                        <div class="insight-card risk-{{ risk_assessment.get('tax_risk', 'low').lower() }}">
+                            <h4>💰 Tax Risk: {{ risk_assessment.get('tax_risk', 'Unknown') }}</h4>
+                        </div>
+                    </div>
+                    
+                    {% if risk_assessment.get('recommendations') %}
+                    <div class="insight-card">
+                        <h4>🛡️ Risk Mitigation Recommendations</h4>
+                        <p>{{ risk_assessment.get('recommendations') }}</p>
+                    </div>
+                    {% endif %}
+                {% else %}
+                    <div class="insight-card">
+                        <h4>❗ Risk Assessment Status</h4>
+                        <p>Risk assessment not available or failed to generate. {{ risk_assessment.get('error', '') }}</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Business Insights Tab -->
+            <div id="insights-tab" class="tab-content">
+                <h3>Business Insights</h3>
+                {% if business_insights and not business_insights.error %}
+                    <div class="insight-card">
+                        <h4>📈 Spending Patterns</h4>
+                        <ul>
+                        {% for pattern in business_insights.spending_patterns %}
+                            <li><strong>{{ pattern.pattern_type }}:</strong> {{ pattern.description }} (Confidence: {{ pattern.confidence }}, Impact: {{ pattern.impact_score }})
+                                <ul>
+                                    {% for rec in pattern.recommendations %}
+                                    <li>{{ rec }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="insight-card">
+                        <h4>🤝 Vendor Relationships</h4>
+                        <ul>
+                        {% for vendor in business_insights.vendor_relationships %}
+                            <li><strong>{{ vendor.vendor_name }}</strong> - Total Spend: ${{ vendor.total_spend }}, Transactions: {{ vendor.transaction_count }}, Risk: {{ vendor.risk_level }}, Payment: {{ vendor.payment_pattern }}
+                                <ul>
+                                    {% for insight in vendor.insights %}
+                                    <li>{{ insight }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="insight-card">
+                        <h4>💸 Cash Flow Analysis</h4>
+                        <ul>
+                            <li>Period: {{ business_insights.cash_flow_analysis.period }}</li>
+                            <li>Net Cash Flow: ${{ business_insights.cash_flow_analysis.net_cash_flow }}</li>
+                            <li>Inflow: ${{ business_insights.cash_flow_analysis.cash_inflow }}</li>
+                            <li>Outflow: ${{ business_insights.cash_flow_analysis.cash_outflow }}</li>
+                            <li>Trend: {{ business_insights.cash_flow_analysis.cash_flow_trend }}</li>
+                            <li>Liquidity Ratio: {{ business_insights.cash_flow_analysis.liquidity_ratio }}</li>
+                            <li>Burn Rate: ${{ business_insights.cash_flow_analysis.burn_rate }}</li>
+                            <li>Runway: {{ business_insights.cash_flow_analysis.runway_months }} months</li>
+                        </ul>
+                        <ul>
+                        {% for insight in business_insights.cash_flow_analysis.insights %}
+                            <li>{{ insight }}</li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="insight-card">
+                        <h4>📊 Key Metrics</h4>
+                        <ul>
+                        {% for metric, value in business_insights.key_metrics.items() %}
+                            <li>{{ metric }}: {{ value }}</li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="insight-card">
+                        <h4>💡 Recommendations</h4>
+                        <ul>
+                        {% for rec in business_insights.recommendations %}
+                            <li>{{ rec }}</li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="insight-card">
+                        <h4>⚠️ Risk Flags</h4>
+                        <ul>
+                        {% for flag in business_insights.risk_flags %}
+                            <li>{{ flag }}</li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="insight-card">
+                        <h4>🎯 Opportunities</h4>
+                        <ul>
+                        {% for opp in business_insights.opportunities %}
+                            <li>{{ opp }}</li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                {% else %}
+                    <div class="insight-card">
+                        <h4>❗ Business Insights Status</h4>
+                        <p>Business insights not available or failed to generate. {{ business_insights.get('error', '') }}</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="back-section">
+                <a href="/" class="btn">🔄 Process Another File</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html> 
